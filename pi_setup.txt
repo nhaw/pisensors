@@ -32,6 +32,7 @@ sudo emacs -nw /etc/modules # i2c stuff
 git config --global user.email "nicholas.haw@gmail.com"
 git config --global user.name "Nicholas Haw"
 
+cd ~/
 mkdir src
 mkdir Download
 cd Download
