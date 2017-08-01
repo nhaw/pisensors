@@ -34,15 +34,17 @@ class SensorSI7021:
     def __init__(self):
         assert (SensorSI7021.exists == False) # Only one allowed
         SensorSI7021.exists = True
+
         import HTU21DF
+        self.htu21df = HTU21DF
 
     def TEMPERATURE(self):
-        HTU21DF.htu_reset
-        temp_c = HTU21DF.read_temperature()
+        self.htu21df.htu_reset
+        temp_c = self.htu21df.read_temperature()
         return c_to_f(temp_c)
 
     def HUMIDITY(self):        
-        return HTU21DF.read_humidity()
+        return self.htu21df.read_humidity()
 
 
 class local_sensor_types:

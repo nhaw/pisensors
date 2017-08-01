@@ -19,23 +19,32 @@ sudo systemctl enable ssh
 sudo /etc/init.d/ssh start
 
 sudo apt-get update
-sudo apt-get -y install python
-sudo apt-get -y install emacs
-sudo apt-get -y install emacs
 sudo apt-get -y install git
+sudo apt-get -y install emacs
+
+mkdir ~/.ssh
+ssh-keygen -t rsa -b 4096 -C "nicholas.haw@gmail.com"
+cat ~/.ssh
+cat ~/.ssh/id_rsa.pub
+# go to github and add key
+
+mkdir -p ~/src
+cd ~/src/
+git clone git@github.com:nhaw/pisensors.git sensors
+cd sensors/
+
+# TODO: script this
+sudo apt-get -y install python
 sudo apt-get -y install build-essential python-dev python-pip python-smbus git
 sudo apt-get -y install -y python-smbus
 sudo apt-get -y install -y i2c-tools
 
-sudo emacs -nw /etc/modules # i2c stuff
-
 git config --global user.email "nicholas.haw@gmail.com"
 git config --global user.name "Nicholas Haw"
 
-cd ~/
-mkdir src
-mkdir Download
-cd Download
+mkdir -p ~/src
+mkdir -p ~/Download 
+cd ~/Download
 wget 
 wget https://pypi.python.org/packages/25/c1/344fdd1f543cba2d38c6fb7db86f2ffc468e72006487005e50df08f0243d/setuptools-36.2.0.zip#md5=60df703040ad8024d24727dc95483740
 unzip setuptools-36.2.0.zip 
@@ -44,36 +53,25 @@ sudo python setup.py install
 easy_install pip
 sudo easy_install pip
 
-mkdir ~/.ssh
-ssh-keygen -t rsa -b 4096 -C "nicholas.haw@gmail.com"
-cat ~/.ssh
-cat ~/.ssh/id_rsa.pub
-# go to github and add key
-
-cd ~/src/
-git clone git@github.com:nhaw/pisensors.git sensors
-cd sensors/
-
-ifconfig
-hostname
-uname -a
-
-
 cd ~/src/
 git clone https://github.com/adafruit/Adafruit_Python_MCP9808.git
 cd Adafruit_Python_MCP9808
 sudo python setup.py install
 
-
-cd ~/src/sensors/
-emacs -nw nest_reporter.py 
-
 sudo ls /dev | grep i2c
 sudo emacs -nw /boot/config.txt
 sudo reboot
 
-sudo i2cdetect -y 1
-sudo i2cdetect -y 0
+
+
+# MANUAL STUFF
+
+sudo emacs -nw /etc/modules # i2c stuff
+
+sudo emacs -nw /etc/rc.local
+#if [ "`ps -A | grep pigpiod`" = "" ]; then
+#  pigpiod
+#fi;
 
 cd ~/src/
 git clone https://github.com/dalexgray/RaspberryPI_HTU21DF.git pi_htu21df
@@ -86,6 +84,13 @@ cd PIGPIO
 make
 sudo make install
 sudo pigpiod # START THE DAEMON
+
+
+
+# TESTING
+
+sudo i2cdetect -y 1
+sudo i2cdetect -y 0
 
 # required for nest reporting
 mkdir -p /home/pi/sensors/config/
