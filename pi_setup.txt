@@ -41,6 +41,7 @@ sudo apt-get -y install -y i2c-tools
 
 git config --global user.email "nicholas.haw@gmail.com"
 git config --global user.name "Nicholas Haw"
+git config --global push.default simple
 
 mkdir -p ~/src
 mkdir -p ~/Download 
@@ -58,8 +59,20 @@ git clone https://github.com/adafruit/Adafruit_Python_MCP9808.git
 cd Adafruit_Python_MCP9808
 sudo python setup.py install
 
+cd ~/src/
+git clone https://github.com/dalexgray/RaspberryPI_HTU21DF.git pi_htu21df
+cd pi_htu21df
+
+cd ~/src/
+wget abyz.co.uk/rpi/pigpio/pigpio.tar
+tar xf pigpio.tar
+cd PIGPIO
+make
+sudo make install
+sudo pigpiod # START THE DAEMON
+
 sudo ls /dev | grep i2c
-sudo emacs -nw /boot/config.txt
+sudo emacs -nw /boot/config.txt # fix i2c setup stuff
 sudo reboot
 
 
@@ -73,24 +86,12 @@ sudo emacs -nw /etc/rc.local
 #  pigpiod
 #fi;
 
-cd ~/src/
-git clone https://github.com/dalexgray/RaspberryPI_HTU21DF.git pi_htu21df
-cd pi_htu21df
-
-cd ~/src/
-wget abyz.co.uk/rpi/pigpio/pigpio.tar
-tar xf pigpio.tar
-cd PIGPIO
-make
-sudo make install
-sudo pigpiod # START THE DAEMON
-
-
 
 # TESTING
 
 sudo i2cdetect -y 1
 sudo i2cdetect -y 0
+
 
 # required for nest reporting
 mkdir -p /home/pi/sensors/config/
